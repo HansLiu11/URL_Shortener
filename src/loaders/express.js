@@ -9,10 +9,6 @@ module.exports = (app) => {
    * Health Check endpoints
    */
 
-  app.get('/', (req, res, next) => {
-    res.send('Hello, World!!');
-  });
-
   app.get("/status", (req, res) => {
     // res.json({'message': 'ok'});
     res.status(200).end();
@@ -23,13 +19,6 @@ module.exports = (app) => {
 
   app.enable("trust proxy");
 
-  //  apply to all requests
-//   app.use(
-//     rateLimit({
-//       windowMs: 60 * 1000, // 1 minutes
-//       max: 100, //it will be ban if more than 100 requests in a time period
-//     })
-//   );
   app.use(cors());
   app.use(express.json());
   // Load API routes
@@ -50,6 +39,6 @@ module.exports = (app) => {
     } else {
       res.status(500);
     }
-    res.json({ error: err.message });
+    res.send( "<h1>" + res.statusCode +" "+ err.message + " on the server </h1>");
   });
 };
