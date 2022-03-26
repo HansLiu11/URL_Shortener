@@ -1,12 +1,20 @@
 const express = require("express");
 const config = require("../config");
+const { body, query } = require("express-validator");
 const urlModel = require("../model/index");
+const middleware = require("./middleware");
 
 module.exports = () => {
     const router = express.Router();
     router.use(express.urlencoded({ extended: false }));
 
-    router.post('/api/v1/urls', async (req,res) => {
+    router.post('/api/v1/urls', 
+        [
+            body("url").optional().isString(),
+            body("expireAt").optional().isString(),
+        ],
+        middleware.validateParams,
+        async (req,res) => {
         try {
             const {url, expireAt} = req.body;
             expired = new Date(expireAt);
