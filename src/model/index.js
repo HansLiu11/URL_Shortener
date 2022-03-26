@@ -1,5 +1,6 @@
-const { response } = require("express");
+const { Op } = require("sequelize");
 const { Url } =  require("../loaders/database");
+
 
 class URLModel {
     addUrl = async (url, expireAt) => {
@@ -31,6 +32,21 @@ class URLModel {
         // console.log(res[0].id);
         return res;
     };
+
+    deleteExpiredUrl = async() => {
+        try {
+            await Url.destroy({
+                where:{
+                    expireAt:{
+                        [Op.lt]: new Date()
+                    }
+                }
+            });
+        } catch (error) {
+            console.log(error);
+        }
+        
+    }
 };
 
 module.exports = new URLModel()
