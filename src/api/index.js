@@ -1,6 +1,6 @@
 const express = require("express");
 const config = require("../config");
-const { body, query } = require("express-validator");
+const { body } = require("express-validator");
 const urlModel = require("../model/index");
 const middleware = require("./middleware");
 
