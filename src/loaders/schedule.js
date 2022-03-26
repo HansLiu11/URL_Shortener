@@ -1,14 +1,12 @@
 const job = require("../schedule");
-const cron = require('node-cron');
+const CronJob = require('cron').CronJob;
 
 module.exports = () => {
     try {
-        // delete expired url everyday
-        cron.schedule('* 0 * * *', job['delete'],{
-            scheduled: true,
-            timezone: "Asia/Taipei",
-        }).start();
+        // delete expired shorturl everyday
+        const myjob = new CronJob('* 0 * * *', job['delete'],null, true);
+        myjob.start();
     } catch (error) {
-        console.log("delete failed");
+        console.log(error.message);
     }
 }
