@@ -8,6 +8,9 @@ module.exports = () => {
     const router = express.Router();
     router.use(express.urlencoded({ extended: false }));
 
+    /*
+    * POST /api/v1/urls to save a new url.
+    */
     router.post('/api/v1/urls', 
         [
             body("url").optional().isString(),
@@ -20,17 +23,21 @@ module.exports = () => {
             expired = new Date(expireAt);
             // console.log(expired);
             const result = await urlModel.addUrl(url, expired);
+            const shortUrl = (config.port == 80)? "http://localhost/" + result.id 
+                                : "http://localhost:" + config.port +"/" + result.id;
 
             res.status(200).json({
                 id: String(result.id),
-                shortUrl: "http://localhost:" + config.port + '/' + result.id
+                shortUrl: shortUrl
             });
         } catch (error) {
             return next(error);
         }
-        
     });
 
+    /*
+    * GET /:url_id route to retrieve the original url and redirect given its id.
+    */
     router.get('/:url_id', async (req, res, next) => {
         try {
             const urlId = req.params.url_id;
