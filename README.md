@@ -13,12 +13,13 @@ This is an URL shortener with two APIs:
     ```json=
     {
         "id": "1",
-        "shortUrl": "http://localhost:8080/10"
+        "shortUrl": "http://localhost/10"
     }
     ```
 2. An API to serve shorten URLs responded by upload API, and redirect to original URL.
     - Request:
-         http://localhost:{port}/{url_id} ex: http://localhost:8080/1
+         http://localhost/{url_id} 
+        - ex: http://localhost/1
     - Response:
         REDIRECT to original URL
 
@@ -31,7 +32,7 @@ This is an URL shortener with two APIs:
 $ npm install
 ```
 
-## :atom: Start
+## :star: Start
 ```shell=
 $ npm start
 ```
