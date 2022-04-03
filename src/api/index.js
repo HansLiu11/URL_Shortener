@@ -13,8 +13,8 @@ module.exports = () => {
     */
     router.post('/api/v1/urls', 
         [
-            body("url").optional().isString(),
-            body("expireAt").optional().isString(),
+            body("url").isString(),
+            body("expireAt").isString(),
         ],
         middleware.validateParams,
         async (req,res) => {
@@ -44,7 +44,7 @@ module.exports = () => {
             const result = await urlModel.getUrl(urlId);
             if(result){
                 console.log(result.url);
-                res.status(200).redirect(301,result.url);
+                res.redirect(301,result.url);
             }
             else{
                 const err = new Error("Not Found");

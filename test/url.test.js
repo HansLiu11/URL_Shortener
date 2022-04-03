@@ -1,4 +1,8 @@
 const chai = require('chai');
+const chaiHttp = require('chai-http');
+
+chai.should();
+chai.use(chaiHttp);
 
 describe('Test API', () => {
 
@@ -8,8 +12,7 @@ describe('Test API', () => {
             chai.request("http://localhost")
                 .get("/" + url_id)
                 .end((err, res) => {
-                    expect(res).to.have.status(200);
-                    expect(res).to.redirectTo('https://www.facebook.com/');
+                    res.should.redirectTo('https://www.youtube.com/');
                     done();
                 })
         });
@@ -19,8 +22,8 @@ describe('Test API', () => {
             chai.request("http://localhost")
                 .get("/" + url_id)
                 .end((err, res) => {
-                    expect(res).to.have.status(404);
-                    response.text.should.be.eq("<h1>404 Not Found on the server </h1>");
+                    res.should.have.status(404);
+                    res.text.should.be.eq("<h1>404 Not Found on the server </h1>");
                     done();
                 });
         });
@@ -35,6 +38,30 @@ describe('Test API', () => {
                 url: "https://www.youtube.com/",
                 expireAt: expireDay
             };
+            chai.request("http://localhost")
+                .post("/api/v1/urls")
+                .send(u)
+                .end((err, res) => {
+                    res.should.have.status(200);
+                    res.body.should.be.a('object');
+                    res.body.should.have.property('id').eq('2');
+                    done();
+                });
+        });
+
+        it("it should not add a new url without expireAt", (done) => {
+            const u = {
+                url: "https://www.youtube.com/",
+            };
+            chai.request("http://localhost")
+                .post("/api/v1/urls")
+                .send(u)
+                .end((err, res) => {
+                    res.should.have.status(400);
+                    res.text.should.be.eq("{\"errors\":[{\"msg\":\"Invalid value\",\"param\":\"expireAt\",\"location\":\"body\"}]}")
+                    console.log(res.text);
+                    done();
+                });
         })
     })
 
